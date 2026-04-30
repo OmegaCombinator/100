@@ -1,0 +1,6 @@
+ingress:
+  - hostname: image.zecyel.xyz
+    service: http://localhost:8090
+  - hostname: 100.aixmath.org
+    service: http://localhost:8100
+  - service: http_status:404

@@ -1,0 +1,16 @@
+[Unit]
+Description=AixMath 100 progress site
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/data/acorn_venv/100
+Environment=NODE_ENV=production
+Environment=HOST=127.0.0.1
+Environment=PORT=8100
+ExecStart=/usr/bin/npm run serve
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
