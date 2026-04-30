@@ -5,6 +5,7 @@ Static progress site for the AixMath formalization Top 100 work.
 ## Content
 
 - Dashboard data: `public/content/top100.json`
+- Formalization progress: `public/content/progress.json`
 - Detail pages: `public/content/problems/*.md`
 
 `top100.json` is copied from:
@@ -16,6 +17,8 @@ Static progress site for the AixMath formalization Top 100 work.
 The deployed Node server serves `/content` directly from `public/content`, so
 data and Markdown edits appear after a browser refresh. Add a detail page such
 as `public/content/problems/044.md` to override the automatic summary for #44.
+Add theorem ids to `public/content/progress.json` to turn the progress grid
+green for fully formalized theorems.
 Run `npm run build` only after changing frontend code.
 
 To refresh the packaged Top 100 data from the workspace:

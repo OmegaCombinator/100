@@ -97,7 +97,14 @@ export type Top100Data = {
   items: Top100Item[];
 };
 
+export type FormalizationProgress = {
+  generated_on?: string;
+  formalized_ids: number[];
+  partial_ids?: number[];
+  notes?: Record<string, string>;
+};
+
 export type LoadedState =
   | { status: 'loading' }
-  | { status: 'ready'; data: Top100Data }
+  | { status: 'ready'; data: Top100Data; progress: FormalizationProgress }
   | { status: 'error'; message: string };

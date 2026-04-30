@@ -1,0 +1,13 @@
+{
+  "generated_on": "2026-04-30",
+  "formalized_ids": [],
+  "partial_ids": [34, 42, 52, 58, 68, 85],
+  "notes": {
+    "34": "Verified staged lemma; not the full divergence theorem.",
+    "42": "Verified staged lemma; not the full reciprocal triangular-number identity.",
+    "52": "Verified staged lemma; not the full powerset cardinality theorem.",
+    "58": "Verified staged lemma; not the full counting theorem for combinations.",
+    "68": "Verified staged lemma; not the closed-form arithmetic-series theorem.",
+    "85": "Verified staged lemmas; not the full digit-list divisibility theorem."
+  }
+}

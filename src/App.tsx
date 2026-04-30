@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import { getMarkdownPath, loadProblemMarkdown, loadProgressData } from './content';
+import { getMarkdownPath, loadFormalizationProgress, loadProblemMarkdown, loadProgressData } from './content';
 import { renderMarkdown } from './markdown';
 import type {
+  FormalizationProgress,
   LoadedState,
   Top100Data,
   Top100Difficulty,
@@ -48,8 +49,8 @@ export function App() {
   const [route, setRoute] = useState<Route>(() => parseRoute());
 
   useEffect(() => {
-    loadProgressData()
-      .then((data) => setState({ status: 'ready', data }))
+    Promise.all([loadProgressData(), loadFormalizationProgress()])
+      .then(([data, progress]) => setState({ status: 'ready', data, progress }))
       .catch((error: unknown) =>
         setState({
           status: 'error',
@@ -88,7 +89,7 @@ export function App() {
       {route.view === 'problem' ? (
         <ProblemView data={state.data} problem={problem} onBack={navigateHome} />
       ) : (
-        <HomeView data={state.data} onOpenProblem={navigateProblem} />
+        <HomeView data={state.data} progress={state.progress} onOpenProblem={navigateProblem} />
       )}
     </Page>
   );
@@ -97,18 +98,29 @@ export function App() {
 function Page({ children }: { children: React.ReactNode }) {
   return (
     <main className="min-h-screen bg-[#fffdf8] text-[#151515]">
-      <div className="mx-auto max-w-4xl px-5 py-8 sm:px-8 sm:py-12">
+      <div className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-12">
         {children}
       </div>
     </main>
   );
 }
 
-function HomeView({ data, onOpenProblem }: { data: Top100Data; onOpenProblem: (id: number) => void }) {
+function HomeView({
+  data,
+  progress,
+  onOpenProblem,
+}: {
+  data: Top100Data;
+  progress: FormalizationProgress;
+  onOpenProblem: (id: number) => void;
+}) {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<'all' | Top100FrontendGroup>('all');
 
   const firstBatchCount = data.recommended.first_batch.length;
+  const formalizedIds = useMemo(() => new Set(progress.formalized_ids), [progress.formalized_ids]);
+  const partialIds = useMemo(() => new Set(progress.partial_ids ?? []), [progress.partial_ids]);
+  const formalizedCount = formalizedIds.size;
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return data.items.filter((item) => {
@@ -129,9 +141,21 @@ function HomeView({ data, onOpenProblem }: { data: Top100Data; onOpenProblem: (i
     });
   }, [data.items, filter, query]);
 
+  const jumpToTheorem = (id: number) => {
+    setQuery('');
+    setFilter('all');
+    window.history.replaceState(null, '', `#theorem-${id}`);
+    requestAnimationFrame(() => {
+      document.getElementById(`theorem-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  };
+
   return (
-    <>
-      <header className="mb-10 border-b border-[#ddd6c8] pb-7">
+    <div className="grid gap-10 lg:grid-cols-[190px_minmax(0,1fr)]">
+      <SiteSidebar data={data} formalizedCount={formalizedCount} />
+
+      <div className="min-w-0">
+        <header id="overview" className="mb-10 scroll-mt-8 border-b border-[#ddd6c8] pb-7">
         <nav className="mb-8 flex items-center justify-between gap-4 text-sm">
           <a className="font-800 text-[#151515] no-underline" href="/">
             AixMath
@@ -146,12 +170,20 @@ function HomeView({ data, onOpenProblem }: { data: Top100Data; onOpenProblem: (i
         <p className="max-w-3xl text-lg leading-8 text-[#444]">
           This page tracks the AixMath effort to formalize Freek Wiedijk's 100 classic theorems in Acorn.
           The current public data records {data.summary.total} targets, {firstBatchCount} first-batch harness targets,
-          and standard-library readiness for each theorem.
+          and {formalizedCount} fully formalized theorem{formalizedCount === 1 ? '' : 's'}.
         </p>
         <p className="mt-3 text-sm text-[#666]">
-          Data generated on {data.generated_on}. Source package: <code>{data.source.manifest_path}</code>.
+          Data generated on {data.generated_on}. Progress updated {progress.generated_on ?? 'manually'}.
         </p>
       </header>
+
+        <ProgressMap
+          items={data.items}
+          formalizedIds={formalizedIds}
+          partialIds={partialIds}
+          notes={progress.notes ?? {}}
+          onJump={jumpToTheorem}
+        />
 
       <section className="mb-8 grid gap-3 sm:grid-cols-[1fr_220px]">
         <label className="block">
@@ -181,18 +213,133 @@ function HomeView({ data, onOpenProblem }: { data: Top100Data; onOpenProblem: (i
         </label>
       </section>
 
-      <ol className="space-y-0">
+      <ol id="theorems" className="scroll-mt-8 space-y-0">
         {filtered.map((item) => (
-          <TheoremItem key={item.id} item={item} onOpenProblem={onOpenProblem} />
+          <TheoremItem
+            key={item.id}
+            item={item}
+            isFormalized={formalizedIds.has(item.id)}
+            isPartial={partialIds.has(item.id)}
+            progressNote={progress.notes?.[String(item.id)]}
+            onOpenProblem={onOpenProblem}
+          />
         ))}
       </ol>
-    </>
+      </div>
+    </div>
   );
 }
 
-function TheoremItem({ item, onOpenProblem }: { item: Top100Item; onOpenProblem: (id: number) => void }) {
+function SiteSidebar({ data, formalizedCount }: { data: Top100Data; formalizedCount: number }) {
   return (
-    <li id={`theorem-${item.id}`} className="border-b border-[#e5dfd3] py-6">
+    <aside className="hidden lg:block">
+      <nav className="sticky top-8 text-sm leading-7">
+        <div className="mb-4 font-800">Contents</div>
+        <a className="block text-[#3567a8] no-underline hover:underline" href="#overview">Overview</a>
+        <a className="block text-[#3567a8] no-underline hover:underline" href="#progress">Progress map</a>
+        <a className="block text-[#3567a8] no-underline hover:underline" href="#theorems">Theorem list</a>
+        <div className="mt-6 border-t border-[#e5dfd3] pt-4 text-[#666]">
+          <div>{formalizedCount}/{data.summary.total} formalized</div>
+          <div>{data.recommended.first_batch.length} first-batch targets</div>
+        </div>
+        <div className="mt-6 border-t border-[#e5dfd3] pt-4">
+          <div className="mb-2 font-800 text-[#555]">Ranges</div>
+          {[1, 21, 41, 61, 81].map((start) => {
+            const end = start + 19;
+            return (
+              <a
+                key={start}
+                className="block text-[#3567a8] no-underline hover:underline"
+                href={`#theorem-${start}`}
+              >
+                {start}-{end}
+              </a>
+            );
+          })}
+        </div>
+      </nav>
+    </aside>
+  );
+}
+
+function ProgressMap({
+  items,
+  formalizedIds,
+  partialIds,
+  notes,
+  onJump,
+}: {
+  items: Top100Item[];
+  formalizedIds: Set<number>;
+  partialIds: Set<number>;
+  notes: Record<string, string>;
+  onJump: (id: number) => void;
+}) {
+  return (
+    <section id="progress" className="mb-9 scroll-mt-8 border-b border-[#ddd6c8] pb-8">
+      <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="text-2xl font-800 leading-tight">Progress map</h2>
+          <p className="mt-1 text-sm leading-6 text-[#666]">
+            Green means the full theorem has been formalized. Red means it has not. Hover for the theorem title; click a square to jump to the entry.
+          </p>
+        </div>
+        <div className="flex gap-4 text-sm text-[#666]">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-3 w-3 border border-[#5f9469] bg-[#6fb37d]" />
+            formalized
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-3 w-3 border border-[#bd8b86] bg-[#df6f68]" />
+            open
+          </span>
+        </div>
+      </div>
+      <div className="grid grid-cols-10 gap-1.5 sm:gap-2" aria-label="Formalization progress map">
+        {items.map((item) => {
+          const isFormalized = formalizedIds.has(item.id);
+          const isPartial = partialIds.has(item.id);
+          const title = `${item.rank_label} ${item.title}: ${
+            isFormalized ? 'formalized' : 'not fully formalized'
+          }${isPartial && !isFormalized ? `; ${notes[String(item.id)] ?? 'partial milestone available'}` : ''}`;
+
+          return (
+            <button
+              key={item.id}
+              aria-label={title}
+              className={[
+                'aspect-square min-h-0 border text-[10px] font-800 leading-none text-white outline-none transition hover:scale-110 focus:scale-110 focus:ring-2 focus:ring-[#3567a8]',
+                isFormalized ? 'border-[#5f9469] bg-[#6fb37d]' : 'border-[#bd8b86] bg-[#df6f68]',
+                isPartial && !isFormalized ? 'ring-2 ring-[#d9bf82] ring-inset' : '',
+              ].join(' ')}
+              title={title}
+              type="button"
+              onClick={() => onJump(item.id)}
+            >
+              {item.rank}
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function TheoremItem({
+  item,
+  isFormalized,
+  isPartial,
+  progressNote,
+  onOpenProblem,
+}: {
+  item: Top100Item;
+  isFormalized: boolean;
+  isPartial: boolean;
+  progressNote?: string;
+  onOpenProblem: (id: number) => void;
+}) {
+  return (
+    <li id={`theorem-${item.id}`} className="scroll-mt-8 border-b border-[#e5dfd3] py-6">
       <div className="mb-2 flex flex-wrap items-baseline gap-x-2 gap-y-1">
         <h2 className="text-xl font-800 leading-snug">
           {item.rank}. {item.title}
@@ -203,6 +350,17 @@ function TheoremItem({ item, onOpenProblem }: { item: Top100Item; onOpenProblem:
       </div>
 
       <div className="mb-3 flex flex-wrap gap-2 text-xs">
+        <span className={[
+          'border px-2 py-0.5 font-700',
+          isFormalized ? 'border-[#8db596] bg-[#f1f8f1] text-[#285b35]' : 'border-[#ddb0aa] bg-[#fbf1f0] text-[#7b342d]',
+        ].join(' ')}>
+          {isFormalized ? 'Formalized' : 'Open'}
+        </span>
+        {isPartial && !isFormalized ? (
+          <span className="border border-[#d9bf82] bg-[#fbf6e8] px-2 py-0.5 font-700 text-[#755416]">
+            Partial milestone
+          </span>
+        ) : null}
         <span className={`border px-2 py-0.5 font-700 ${groupTone[item.frontend_group]}`}>
           {item.frontend_group_label.en}
         </span>
@@ -218,6 +376,9 @@ function TheoremItem({ item, onOpenProblem }: { item: Top100Item; onOpenProblem:
       </div>
 
       <p className="mb-3 leading-7 text-[#444]">{item.notes}</p>
+      {progressNote ? (
+        <p className="mb-3 text-sm leading-6 text-[#666]">{progressNote}</p>
+      ) : null}
       <p className="mb-3 text-sm leading-6 text-[#555]">
         Acorn target: <code>{item.module_path}</code>
       </p>

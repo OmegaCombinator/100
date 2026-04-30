@@ -1,4 +1,4 @@
-import type { Top100Data, Top100Item } from './types';
+import type { FormalizationProgress, Top100Data, Top100Item } from './types';
 
 export async function loadProgressData(): Promise<Top100Data> {
   const response = await fetch(`/content/top100.json?ts=${Date.now()}`, {
@@ -15,6 +15,28 @@ export async function loadProgressData(): Promise<Top100Data> {
     ...data,
     groups: [...data.groups].sort((left, right) => left.order - right.order),
     items: [...data.items].sort((left, right) => left.rank - right.rank),
+  };
+}
+
+export async function loadFormalizationProgress(): Promise<FormalizationProgress> {
+  const response = await fetch(`/content/progress.json?ts=${Date.now()}`, {
+    headers: { Accept: 'application/json' },
+  });
+
+  if (response.status === 404) {
+    return { formalized_ids: [], partial_ids: [], notes: {} };
+  }
+
+  if (!response.ok) {
+    throw new Error(`无法读取 progress.json (${response.status})`);
+  }
+
+  const data = (await response.json()) as FormalizationProgress;
+  return {
+    formalized_ids: data.formalized_ids ?? [],
+    partial_ids: data.partial_ids ?? [],
+    notes: data.notes ?? {},
+    generated_on: data.generated_on,
   };
 }
 
