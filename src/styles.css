@@ -10,8 +10,21 @@ body {
 }
 
 button,
-input {
+input,
+select {
   border-radius: 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+code {
+  background: #f4efe5;
+  border: 1px solid #e3dbc9;
+  font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.9em;
+  padding: 0.08rem 0.25rem;
 }
 
 .text-balance {
