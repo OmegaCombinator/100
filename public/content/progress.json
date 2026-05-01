@@ -8,6 +8,6 @@
     "52": "Verified staged lemma; not the full powerset cardinality theorem.",
     "58": "Verified staged lemma; not the full counting theorem for combinations.",
     "68": "Verified staged lemma; not the closed-form arithmetic-series theorem.",
-    "85": "Verified staged lemmas, including an unconditional one-step decimal-read lemma modulo 3; not the full digit-list divisibility theorem."
+    "85": "Verified staged lemmas, including one-step decimal-read and read-compatibility lemmas modulo 3; not the full digit-list divisibility theorem."
   }
 }
