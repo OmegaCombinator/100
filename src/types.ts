@@ -100,7 +100,6 @@ export type Top100Data = {
 export type FormalizationProgress = {
   generated_on?: string;
   formalized_ids: number[];
-  partial_ids?: number[];
   notes?: Record<string, string>;
 };
 

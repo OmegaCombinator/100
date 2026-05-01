@@ -83,7 +83,6 @@ function HomeView({
   const [query, setQuery] = useState('');
 
   const formalizedIds = useMemo(() => new Set(progress.formalized_ids), [progress.formalized_ids]);
-  const partialIds = useMemo(() => new Set(progress.partial_ids ?? []), [progress.partial_ids]);
   const formalizedCount = formalizedIds.size;
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -126,8 +125,8 @@ function HomeView({
         </h1>
         <p className="max-w-3xl text-lg leading-8 text-[#444]">
           This page tracks the AixMath effort to formalize Freek Wiedijk's 100 classic theorems in Acorn.
-          The current public record contains {data.summary.total} theorems and {formalizedCount} completed
-          formalization{formalizedCount === 1 ? '' : 's'}.
+          The current public record contains {data.summary.total} theorems and {formalizedCount} verified
+          Acorn result{formalizedCount === 1 ? '' : 's'}.
         </p>
         <p className="mt-3 text-sm leading-6 text-[#666]">
           Data generated on {data.generated_on}. Progress updated {progress.generated_on ?? 'manually'}.
@@ -159,7 +158,6 @@ function HomeView({
             key={item.id}
             item={item}
             isFormalized={formalizedIds.has(item.id)}
-            isPartial={partialIds.has(item.id)}
             onOpenProblem={onOpenProblem}
           />
         ))}
@@ -178,7 +176,7 @@ function SiteSidebar({ data, formalizedCount }: { data: Top100Data; formalizedCo
         <a className="block text-[#3567a8] no-underline hover:underline" href="#progress">Progress map</a>
         <a className="block text-[#3567a8] no-underline hover:underline" href="#theorems">Theorem list</a>
         <div className="mt-6 border-t border-[#e5dfd3] pt-4 text-[#666]">
-          <div>{formalizedCount}/{data.summary.total} formalized</div>
+          <div>{formalizedCount}/{data.summary.total} passed</div>
         </div>
         <div className="mt-6 border-t border-[#e5dfd3] pt-4">
           <div className="mb-2 font-800 text-[#555]">Ranges</div>
@@ -215,13 +213,13 @@ function ProgressMap({
         <div>
           <h2 className="text-2xl font-800 leading-tight">Progress map</h2>
           <p className="mt-1 text-sm leading-6 text-[#666]">
-            Green means formalized. Red means open. Hover for the theorem title; click a square to jump to the entry.
+            Green means passed. Red means open. Hover for the theorem title; click a square to jump to the entry.
           </p>
         </div>
         <div className="flex gap-4 text-sm text-[#666]">
           <span className="inline-flex items-center gap-1.5">
             <span className="h-3 w-3 border border-[#5f9469] bg-[#6fb37d]" />
-            formalized
+            passed
           </span>
           <span className="inline-flex items-center gap-1.5">
             <span className="h-3 w-3 border border-[#bd8b86] bg-[#df6f68]" />
@@ -232,7 +230,8 @@ function ProgressMap({
       <div className="grid grid-cols-10 gap-1.5 sm:gap-2" aria-label="Formalization progress map">
         {items.map((item) => {
           const isFormalized = formalizedIds.has(item.id);
-          const title = `${item.rank_label} ${item.title}: ${isFormalized ? 'formalized' : 'open'}`;
+          const status = isFormalized ? 'passed' : 'open';
+          const title = `${item.rank_label} ${item.title}: ${status}`;
 
           return (
             <button
@@ -258,14 +257,17 @@ function ProgressMap({
 function TheoremItem({
   item,
   isFormalized,
-  isPartial,
   onOpenProblem,
 }: {
   item: Top100Item;
   isFormalized: boolean;
-  isPartial: boolean;
   onOpenProblem: (id: number) => void;
 }) {
+  const statusLabel = isFormalized ? 'Passed' : 'Open';
+  const statusClass = isFormalized
+    ? 'border-[#8db596] bg-[#f1f8f1] text-[#285b35]'
+    : 'border-[#ddb0aa] bg-[#fbf1f0] text-[#7b342d]';
+
   return (
     <li id={`theorem-${item.id}`} className="scroll-mt-8 border-b border-[#e5dfd3] py-6">
       <div className="mb-2 flex flex-wrap items-baseline gap-x-2 gap-y-1">
@@ -280,9 +282,9 @@ function TheoremItem({
       <div className="mb-3 flex flex-wrap gap-2 text-xs">
         <span className={[
           'border px-2 py-0.5 font-700',
-          isFormalized ? 'border-[#8db596] bg-[#f1f8f1] text-[#285b35]' : 'border-[#ddb0aa] bg-[#fbf1f0] text-[#7b342d]',
+          statusClass,
         ].join(' ')}>
-          {isFormalized ? 'Formalized' : 'Open'}
+          {statusLabel}
         </span>
         <span className="border border-[#ded7c9] bg-white px-2 py-0.5 font-700 text-[#555]">
           {item.area_label.en}
@@ -293,7 +295,7 @@ function TheoremItem({
         <a className="text-[#3567a8] underline decoration-[#bfd1eb] underline-offset-3" href={item.source_url} rel="noreferrer" target="_blank">
           Freek source
         </a>
-        {(isFormalized || isPartial) ? (
+        {isFormalized ? (
           <button
             className="border-0 bg-transparent p-0 text-sm text-[#3567a8] underline decoration-[#bfd1eb] underline-offset-3"
             type="button"

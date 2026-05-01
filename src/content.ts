@@ -24,7 +24,7 @@ export async function loadFormalizationProgress(): Promise<FormalizationProgress
   });
 
   if (response.status === 404) {
-    return { formalized_ids: [], partial_ids: [], notes: {} };
+    return { formalized_ids: [], notes: {} };
   }
 
   if (!response.ok) {
@@ -34,7 +34,6 @@ export async function loadFormalizationProgress(): Promise<FormalizationProgress
   const data = (await response.json()) as FormalizationProgress;
   return {
     formalized_ids: data.formalized_ids ?? [],
-    partial_ids: data.partial_ids ?? [],
     notes: data.notes ?? {},
     generated_on: data.generated_on,
   };
