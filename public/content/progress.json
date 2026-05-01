@@ -5,6 +5,7 @@
     66,
     69,
     74,
+    85,
     96
   ],
   "notes": {
@@ -17,7 +18,7 @@
     "68": "Verified staged lemma; not the closed-form arithmetic-series theorem.",
     "69": "Complete verified wrapper proof of the Euclidean GCD algorithm: termination, returned gcd value, and greatest-common-divisor divisibility property.",
     "74": "Complete verified wrapper proof of the natural-number induction principle, reusing nat.nat_base.alt_induction.",
-    "85": "Verified staged lemmas, including one-step decimal-read, read-compatibility, and digit-list read-compatibility lemmas modulo 3; not the full digit-sum divisibility theorem.",
+    "85": "Complete verified proof of the divisibility-by-3 rule for decimal digit lists: the read value is divisible by Int.3 iff the digit sum is divisible by Int.3.",
     "96": "Complete verified wrapper proof of inclusion-exclusion for two finite sets, reusing finite_set.finite_set_inclusion_exclusion."
   }
 }

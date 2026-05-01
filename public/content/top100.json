@@ -6722,9 +6722,9 @@
         "zh": "下一批可试"
       },
       "status": {
-        "key": "ready_for_staged_harness",
-        "label_zh": "可分阶段尝试",
-        "label_en": "Ready for staged harness"
+        "key": "proof_verified",
+        "label_zh": "证明已验证",
+        "label_en": "Proof verified"
       },
       "recommended": true,
       "recommended_tier": "first_batch",
