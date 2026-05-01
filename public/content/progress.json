@@ -3,6 +3,7 @@
   "formalized_ids": [
     44,
     66,
+    68,
     69,
     74,
     85,
@@ -15,7 +16,7 @@
     "52": "Verified staged lemma; not the full powerset cardinality theorem.",
     "58": "Verified staged lemma; not the full counting theorem for combinations.",
     "66": "Complete verified wrapper proof of the finite geometric-series formula, reusing the official standard-library theorem ring.geometric_sum.",
-    "68": "Verified staged lemma; not the closed-form arithmetic-series theorem.",
+    "68": "Complete verified proof of the finite arithmetic-series identity: the sum of 0 + ... + (n - 1) is n(n - 1)/2 over Real.",
     "69": "Complete verified wrapper proof of the Euclidean GCD algorithm: termination, returned gcd value, and greatest-common-divisor divisibility property.",
     "74": "Complete verified wrapper proof of the natural-number induction principle, reusing nat.nat_base.alt_induction.",
     "85": "Complete verified proof of the divisibility-by-3 rule for decimal digit lists: the read value is divisible by Int.3 iff the digit sum is divisible by Int.3.",
