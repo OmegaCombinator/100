@@ -3,7 +3,8 @@
   "formalized_ids": [
     44,
     66,
-    69
+    69,
+    74
   ],
   "notes": {
     "34": "Verified staged lemma; not the full divergence theorem.",
@@ -14,6 +15,7 @@
     "66": "Complete verified wrapper proof of the finite geometric-series formula, reusing the official standard-library theorem ring.geometric_sum.",
     "68": "Verified staged lemma; not the closed-form arithmetic-series theorem.",
     "69": "Complete verified wrapper proof of the Euclidean GCD algorithm: termination, returned gcd value, and greatest-common-divisor divisibility property.",
+    "74": "Complete verified wrapper proof of the natural-number induction principle, reusing nat.nat_base.alt_induction.",
     "85": "Verified staged lemmas, including one-step decimal-read, read-compatibility, and digit-list read-compatibility lemmas modulo 3; not the full digit-sum divisibility theorem."
   }
 }
