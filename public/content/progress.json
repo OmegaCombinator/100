@@ -1,9 +1,12 @@
 {
   "generated_on": "2026-05-01",
-  "formalized_ids": [],
+  "formalized_ids": [
+    44
+  ],
   "notes": {
     "34": "Verified staged lemma; not the full divergence theorem.",
     "42": "Verified staged lemma; not the full reciprocal triangular-number identity.",
+    "44": "Complete verified wrapper proof of the commutative-ring binomial theorem, reusing the official standard-library theorem comm_ring.binomial.binomial.",
     "52": "Verified staged lemma; not the full powerset cardinality theorem.",
     "58": "Verified staged lemma; not the full counting theorem for combinations.",
     "68": "Verified staged lemma; not the closed-form arithmetic-series theorem.",
