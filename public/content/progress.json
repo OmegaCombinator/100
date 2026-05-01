@@ -2,6 +2,7 @@
   "generated_on": "2026-05-01",
   "formalized_ids": [
     44,
+    58,
     66,
     68,
     69,
@@ -14,7 +15,7 @@
     "42": "Verified staged lemma; not the full reciprocal triangular-number identity.",
     "44": "Complete verified wrapper proof of the commutative-ring binomial theorem, reusing the official standard-library theorem comm_ring.binomial.binomial.",
     "52": "Verified staged lemma; not the full powerset cardinality theorem.",
-    "58": "Verified staged lemma; not the full counting theorem for combinations.",
+    "58": "Complete verified proof of the factorial formula for binomial coefficients, reusing nat.nat_combo.choose_add.",
     "66": "Complete verified wrapper proof of the finite geometric-series formula, reusing the official standard-library theorem ring.geometric_sum.",
     "68": "Complete verified proof of the finite arithmetic-series identity: the sum of 0 + ... + (n - 1) is n(n - 1)/2 over Real.",
     "69": "Complete verified wrapper proof of the Euclidean GCD algorithm: termination, returned gcd value, and greatest-common-divisor divisibility property.",
