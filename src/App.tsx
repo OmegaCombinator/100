@@ -125,8 +125,8 @@ function HomeView({
         </h1>
         <p className="max-w-3xl text-lg leading-8 text-[#444]">
           This page tracks the AixMath effort to formalize Freek Wiedijk's 100 classic theorems in Acorn.
-          The current public record contains {data.summary.total} theorems and {formalizedCount} verified
-          Acorn result{formalizedCount === 1 ? '' : 's'}.
+          The current public record contains {data.summary.total} theorems and {formalizedCount} completed
+          formalization{formalizedCount === 1 ? '' : 's'}.
         </p>
         <p className="mt-3 text-sm leading-6 text-[#666]">
           Data generated on {data.generated_on}. Progress updated {progress.generated_on ?? 'manually'}.

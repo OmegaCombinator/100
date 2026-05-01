@@ -22,13 +22,13 @@ public/content/problems/044.md
 If a Markdown file exists, the detail page renders it. Otherwise the app renders
 an automatic summary from `top100.json`.
 
-Verification status for the red/green progress map is stored in
+Formalization status for the red/green progress map is stored in
 `public/content/progress.json`.
 
-- Add a theorem id to `formalized_ids` when the currently tracked Acorn artifact
-  has been manually reviewed and verified.
-- Use `notes` to describe whether the verified artifact is the full theorem or a
-  staged milestone toward it.
+- Add a theorem id to `formalized_ids` only when the full Top 100 theorem has
+  been formalized and verified.
+- Keep staged lemmas out of `formalized_ids`; describe them in `notes` or the
+  theorem detail page instead.
 
 Content changes are served at runtime by `server.mjs`; rebuilds are only needed
 when the React app or styling changes.
