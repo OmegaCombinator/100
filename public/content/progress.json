@@ -1,6 +1,7 @@
 {
   "generated_on": "2026-05-06",
   "formalized_ids": [
+    1,
     44,
     52,
     58,
@@ -12,6 +13,7 @@
     96
   ],
   "notes": {
+    "1": "Complete verified proof of the irrationality of sqrt(2), stated as no rational r satisfies r * r = Rat.2.",
     "34": "Verified staged lemma; not the full divergence theorem.",
     "42": "Verified staged lemma; not the full reciprocal triangular-number identity.",
     "44": "Complete verified wrapper proof of the commutative-ring binomial theorem, reusing the official standard-library theorem comm_ring.binomial.binomial.",
