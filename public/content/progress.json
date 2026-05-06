@@ -2,6 +2,7 @@
   "generated_on": "2026-05-06",
   "formalized_ids": [
     1,
+    10,
     42,
     44,
     52,
@@ -15,6 +16,7 @@
   ],
   "notes": {
     "1": "Complete verified proof of the irrationality of sqrt(2), stated as no rational r satisfies r * r = Rat.2.",
+    "10": "Complete verified proof of Euler's generalization of Fermat's little theorem: if n is nonzero and a is coprime to n, then a^phi(n) is congruent to 1 modulo n.",
     "34": "Verified staged lemma; not the full divergence theorem.",
     "42": "Complete verified proof of the reciprocal triangular-number identity: the finite sum of 1/T_k for k = 1..n is 2n/(n + 1).",
     "44": "Complete verified wrapper proof of the commutative-ring binomial theorem, reusing the official standard-library theorem comm_ring.binomial.binomial.",
