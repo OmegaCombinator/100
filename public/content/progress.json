@@ -2,6 +2,7 @@
   "generated_on": "2026-05-08",
   "formalized_ids": [
     1,
+    3,
     4,
     10,
     11,
@@ -24,6 +25,7 @@
   ],
   "notes": {
     "1": "Complete verified proof of the irrationality of sqrt(2), stated as no rational r satisfies r * r = Rat.2.",
+    "3": "Complete verified proof that the rational numbers admit a natural-number enumeration and contain an embedded copy of the natural numbers.",
     "4": "Complete verified proof of the coordinate-plane Pythagorean theorem: under a concrete R2 orthogonality hypothesis, the squared Euclidean norm of the hypotenuse equals the sum of the squared Euclidean norms of the legs.",
     "10": "Complete verified proof of Euler's generalization of Fermat's little theorem: if n is nonzero and a is coprime to n, then a^phi(n) is congruent to 1 modulo n.",
     "11": "Complete verified wrapper proof of the infinitude of primes: for every natural n, there exists a prime p greater than n.",
