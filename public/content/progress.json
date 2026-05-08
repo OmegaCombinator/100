@@ -1,5 +1,5 @@
 {
-  "generated_on": "2026-05-07",
+  "generated_on": "2026-05-08",
   "formalized_ids": [
     1,
     10,
@@ -9,6 +9,7 @@
     44,
     52,
     58,
+    60,
     63,
     66,
     68,
@@ -28,6 +29,7 @@
     "44": "Complete verified wrapper proof of the commutative-ring binomial theorem, reusing the official standard-library theorem comm_ring.binomial.binomial.",
     "52": "Complete verified proof of the finite powerset theorem: the generated subset list contains exactly the finite subsets of the input finite set and has cardinality 2^n.",
     "58": "Complete verified proof of the factorial formula for binomial coefficients, reusing nat.nat_combo.choose_add.",
+    "60": "Complete verified proof of Bezout's theorem for integers: the gcd of two integers is a nonnegative common divisor and an integer linear combination of them.",
     "63": "Complete verified proof of Cantor's theorem: there is no surjection from a type onto its set of subsets.",
     "66": "Complete verified wrapper proof of the finite geometric-series formula, reusing the official standard-library theorem ring.geometric_sum.",
     "68": "Complete verified proof of the finite arithmetic-series identity: the sum of 0 + ... + (n - 1) is n(n - 1)/2 over Real.",
