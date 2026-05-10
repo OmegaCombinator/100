@@ -24,6 +24,7 @@
     78,
     80,
     85,
+    89,
     91,
     96
   ],
@@ -51,6 +52,7 @@
     "78": "Complete verified proof of the finite real Cauchy-Schwarz inequality in squared form for finite dot products and sums of squares.",
     "80": "Complete verified wrapper proof of the fundamental theorem of arithmetic: every positive natural number has a prime factorisation, unique up to permutation.",
     "85": "Complete verified proof of the divisibility-by-3 rule for decimal digit lists: the read value is divisible by Int.3 iff the digit sum is divisible by Int.3.",
+    "89": "Complete verified proof of the factor and remainder theorems for real coefficient polynomials represented by finite coefficient prefixes.",
     "91": "Complete verified proof of the Euclidean triangle inequality on R^2, stated using nonnegative square roots of the concrete Point2[Real] squared norm.",
     "96": "Complete verified wrapper proof of inclusion-exclusion for two finite sets, reusing finite_set.finite_set_inclusion_exclusion."
   }
